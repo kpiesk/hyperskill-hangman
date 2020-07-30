@@ -1,44 +1,51 @@
-import random
+from random import choice
+from string import ascii_lowercase
 
 
+# Allows the player to play the game Hangman
 def hangman():
     print('H A N G M A N')
     words = ['python', 'java', 'kotlin', 'javascript']
-    random.seed()
-    correct_word = random.choice(words)
-    guess_letters(correct_word)
+    word = choice(words)
+    guess_letters(word)
 
 
-# Allows the player to guess the word in 8 attempts
-def guess_letters(correct_word):
-    lives = 8  # lives are not lost if the guess is correct
-    player_word = ['-'] * len(correct_word)
+# Allows the player to guess the letters of the randomly chosen word
+def guess_letters(word):
+    lives = 8
+    hint = ['-'] * len(word)
+    guesses = set()
 
     while lives > 0:
-        print(f"\n{''.join(player_word)}")
+        print(f"\n{''.join(hint)}")
         # checks whether the user won the game
-        if '-' not in player_word:
+        if '-' not in hint:
             print('You guessed the word!\nYou survived!')
             break
-        player_letter = input('Input a letter: ')
+        guess = input('Input a letter: ')
 
-        # checks whether the user has already attempted this letter
-        if player_letter in correct_word and player_letter in player_word:
-            print('No improvements')
-            # player loses a life if attempts the already guessed letter
-            lives -= 1
-
-        # checks whether the user guessed the letter correctly
-        elif player_letter in correct_word:
-            for i in range(len(correct_word)):
-                # all cases of the guessed letter is uncovered
-                if correct_word[i] == player_letter:
-                    player_word[i] = player_letter
-
+        # checks whether the player entered exactly one letter
+        if len(guess) != 1:
+            print('You should input a single letter')
+            continue
+        # checks whether the player entered an English lowercase letter
+        elif guess not in ascii_lowercase:
+            print('It is not an ASCII lowercase letter')
+            continue
+        # checks whether the player has already attempted this letter
+        elif guess in guesses:
+            print('You already typed this letter')
+        # checks whether the player guessed the letter correctly
+        elif guess in word:
+            # all cases of the guessed letter are uncovered
+            hint = [guess if word[i] == guess else hint[i]
+                    for i in range(len(word))]
+        # checks whether the player guessed the letter incorrectly
         else:
             print('No such letter in the word')
-            # player loses a life if their guess is incorrect
-            lives -= 1
+            lives -= 1  # player loses a life if their guess is incorrect
+
+        guesses.add(guess)
 
     else:
         print("You are hanged!")  # is only printed if the player lost
