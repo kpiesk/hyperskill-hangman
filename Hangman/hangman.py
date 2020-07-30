@@ -5,7 +5,8 @@ from typing import List
 
 # Allows the player to play the game Hangman
 def hangman():
-    words = ['python', 'java', 'kotlin', 'javascript']
+    words = ['python', 'java', 'kotlin', 'javascript', 'ruby', 'swift',
+             'assembly', 'matlab']
     print('H A N G M A N')
 
     while True:
@@ -14,13 +15,13 @@ def hangman():
             break
         elif game_choice == 'play':
             word = choice(words)
-            guess_letters(word)
+            play_game(word)
         else:
             continue
 
 
 # Allows the player to guess the letters of the randomly chosen word
-def guess_letters(word):
+def play_game(word):
     lives = 8
     hint: List[str] = ['-'] * len(word)
     guesses = set()
